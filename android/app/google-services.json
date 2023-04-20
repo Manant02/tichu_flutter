@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "561251907627",
+    "project_id": "tichu-1925e",
+    "storage_bucket": "tichu-1925e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561251907627:android:36adc2cd381f7e4270126e",
+        "android_client_info": {
+          "package_name": "com.example.tichu_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561251907627-s84o7d4mhgvjugrqd1ng1j56oe3ghjtm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeRXsr6ohY-JquWuKB15p7VcCHWynH_kw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561251907627-s84o7d4mhgvjugrqd1ng1j56oe3ghjtm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
