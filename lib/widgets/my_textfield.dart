@@ -86,19 +86,16 @@ class MyTextField extends StatelessWidget {
             errorMaxLines: 2,
             suffixIcon: suffixIcon,
             suffixIconColor: Colors.white,
-            counter: showCounter ? null : Container(),
-            counterStyle: Theme.of(context)
-                .textTheme
-                .labelMedium!
-                .copyWith(color: onLight ? Colors.black : Colors.white60),
-            hintStyle: Theme.of(context)
-                .textTheme
-                .labelMedium!
-                .copyWith(color: onLight ? Colors.black : Colors.white60),
-            errorStyle: Theme.of(context)
-                .textTheme
-                .labelSmall
-                ?.copyWith(color: Theme.of(context).colorScheme.error),
+            counterText: showCounter ? null : "",
+            // counterStyle: Theme.of(context)
+            //     .textTheme
+            //     .labelMedium!
+            //     .copyWith(color: onLight ? Colors.black : Colors.white60),
+            // hintStyle: Theme.of(context)
+            //     .textTheme
+            //     .labelMedium!
+            //     .copyWith(color: onLight ? Colors.black : Colors.white60),
+            errorStyle: TextStyle(color: Colors.white),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
             border: OutlineInputBorder(

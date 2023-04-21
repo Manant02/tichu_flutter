@@ -23,7 +23,7 @@ class MyPrimaryButton extends StatelessWidget {
       focusElevation: 0,
       highlightElevation: 0,
       padding: const EdgeInsets.symmetric(vertical: 14),
-      color: enabled ? Colors.yellow : Colors.grey,
+      color: enabled ? Colors.yellow : Colors.yellow[700],
       // shape: OutlineInputBorder(
       //   borderRadius: BorderRadius.circular(100),
       //   borderSide: BorderSide.none,
@@ -32,9 +32,10 @@ class MyPrimaryButton extends StatelessWidget {
       child: text != null
           ? Text(
               text!,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
+                color: enabled ? Colors.black : Colors.black38,
               ),
             ).px(18)
           : null,
