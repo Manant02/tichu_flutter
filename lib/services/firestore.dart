@@ -26,4 +26,8 @@ class Firestore {
 
     return ServiceResponse(errString, doc?.id);
   }
+
+  Stream<QuerySnapshot> getTichuTableStream() {
+    return _firestore.collection('tables').snapshots();
+  }
 }

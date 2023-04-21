@@ -18,12 +18,11 @@ class TichuTable {
     return 'TichuTable(uid: $uid, name: $name, shortGame: $shortGame)';
   }
 
-  factory TichuTable.fromDocumentSnapshot(
-      DocumentSnapshot<Map<String, dynamic>> doc) {
-    final data = doc.data();
+  factory TichuTable.fromDocumentSnapshot(DocumentSnapshot doc) {
+    final data = doc.data()! as Map<String, dynamic>;
     return TichuTable(
       uid: doc.id,
-      shortGame: data!['shortGame'],
+      shortGame: data['shortGame'],
       name: data['name'],
       password: data['password'],
     );
