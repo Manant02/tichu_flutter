@@ -1,0 +1,10 @@
+"filename", "language", "Dart", "TypeScript", "comment", "blank", "total"
+"/home/manman/Github/tichu_flutter/functions/src/index.ts", "TypeScript", 0, 39, 16, 5, 60
+"/home/manman/Github/tichu_flutter/lib/models/tichu_game.dart", "Dart", 72, 0, 0, 4, 76
+"/home/manman/Github/tichu_flutter/lib/screens/tichu_table/tichu_table_screen.dart", "Dart", 276, 0, 7, 6, 289
+"/home/manman/Github/tichu_flutter/lib/services/firestore.dart", "Dart", 11, 0, 0, 1, 12
+"/home/manman/Github/tichu_flutter/lib/services/providers.dart", "Dart", 8, 0, 0, 1, 9
+"/home/manman/Github/tichu_flutter/lib/widgets/my_list_tile.dart", "Dart", 10, 0, 0, 0, 10
+"/home/manman/Github/tichu_flutter/lib/widgets/tichu_card_widget.dart", "Dart", 25, 0, 0, 4, 29
+"/home/manman/Github/tichu_flutter/lib/widgets/tichu_table_menu.dart", "Dart", 22, 0, 0, 0, 22
+"Total", "-", 424, 39, 23, 21, 507

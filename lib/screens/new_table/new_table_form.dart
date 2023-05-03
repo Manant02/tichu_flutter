@@ -4,9 +4,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tichu_flutter/screens/new_table/new_table_screen.dart';
 import 'package:tichu_flutter/screens/tichu_table/tichu_table_screen.dart';
 import 'package:tichu_flutter/services/firestore.dart';
+import 'package:tichu_flutter/services/providers.dart';
 import 'package:tichu_flutter/utils/show_platform_alert_dialog.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../utils/extensions.dart';
 import '../../widgets/my_checkbox.dart';
 import '../../widgets/my_primary_button.dart';
 import '../../widgets/my_textfield.dart';
@@ -23,10 +25,57 @@ class NewTableForm extends HookConsumerWidget {
   ) async {
     final firestore = Firestore();
     ref.read(newTableLoadingProvider.notifier).state = true;
-    final res = await firestore.createTichuTable(name, shortGame, password);
+
+    final tichuUserStream = ref.watch(tichuUserStreamProvider);
+
+    final now = DateTime.now();
+    while (tichuUserStream.isLoading &&
+        DateTime.now().isBefore(now.add(const Duration(seconds: 10)))) {
+      /*wait*/
+    }
+
+    if (tichuUserStream.isLoading) {
+      showPlatformAlertDialog(
+        title: 'Timed out',
+        contentText: 'Could not get user info. Please try again.',
+        button1OnPressed: () {
+          ref.read(newTableLoadingProvider.notifier).state = false;
+          navigator.pop();
+        },
+      );
+      return;
+    }
+
+    if (tichuUserStream.hasError) {
+      showPlatformAlertDialog(
+        title: 'Error',
+        contentText: tichuUserStream.error.toString(),
+        button1OnPressed: () {
+          ref.read(newTableLoadingProvider.notifier).state = false;
+          navigator.pop();
+        },
+      );
+      return;
+    }
+
+    final tichuUser = tichuUserStream.value;
+    if (tichuUser == null) {
+      showPlatformAlertDialog(
+        title: 'Error',
+        contentText: 'No user logged in.',
+        button1OnPressed: () {
+          ref.read(newTableLoadingProvider.notifier).state = false;
+          navigator.pop();
+        },
+      );
+      return;
+    }
+    final res = await firestore.createTichuTable(
+        name, shortGame, password, tichuUser.uid);
     if (res.err == null) {
       navigator.push(MaterialPageRoute(
-          builder: (context) => TichuTableScreen(tableUid: res.ret!)));
+        builder: (context) => TichuTableScreen(tableUid: res.ret!),
+      ));
       ref.read(newTableLoadingProvider.notifier).state = false;
     } else {
       showPlatformAlertDialog(
@@ -45,7 +94,7 @@ class NewTableForm extends HookConsumerWidget {
     final nameTextController = useTextEditingController();
     final passwordTextController = useTextEditingController();
     final shortGameState = useState(false);
-    final formKey = GlobalKey<FormState>();
+    const formKey = GlobalObjectKey<FormState>('newTable');
     return Form(
       key: formKey,
       child: Column(
