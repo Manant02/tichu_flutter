@@ -15,6 +15,16 @@ enum PlayerNr {
               : this == PlayerNr.four
                   ? 'player4'
                   : '';
+
+  factory PlayerNr.fromString(String str) => str == 'player1'
+      ? PlayerNr.one
+      : str == 'player2'
+          ? PlayerNr.two
+          : str == 'player3'
+              ? PlayerNr.three
+              : str == 'player4'
+                  ? PlayerNr.four
+                  : PlayerNr.one;
 }
 
 enum TablePos {

@@ -24,7 +24,7 @@ export const handleTableUpdate = functions
   .firestore.document("tables/{tableUid}")
   .onUpdate(async (change, context) => {
     const table = change.after.data();
-    
+
     // If all players ready, start new game
     if (table.gameUid == null &&
       table.player1Ready &&
@@ -32,7 +32,7 @@ export const handleTableUpdate = functions
       table.player3Ready &&
       table.player4Ready) {
       const deck = [
-        "M1", "DN", "PX", "DG",
+        "sM", "sD", "sP", "sG",
         "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "rX",
         "rJ", "rQ", "rK", "rA",
         "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "gX",
@@ -51,20 +51,21 @@ export const handleTableUpdate = functions
         deck[j] = temp;
       }
 
-      let turn;
-      if (deck.slice(0, 14).includes("M1")) {
-        turn = "player1";
-      } else if (deck.slice(14, 28).includes("M1")) {
-        turn = "player2";
-      } else if (deck.slice(28, 42).includes("M1")) {
-        turn = "player3";
-      } else if (deck.slice(42, 56).includes("M1")) {
-        turn = "player4";
-      }  
+      // let turn;
+      // if (deck.slice(0, 14).includes("sM")) {
+      //   turn = "player1";
+      // } else if (deck.slice(14, 28).includes("sM")) {
+      //   turn = "player2";
+      // } else if (deck.slice(28, 42).includes("sM")) {
+      //   turn = "player3";
+      // } else if (deck.slice(42, 56).includes("sM")) {
+      //   turn = "player4";
+      // }
 
       const docRef = await admin.firestore().collection("games").add({
         "inPlay": [],
-        "turn": turn,
+        "turn": null,
+        "trading": true,
         "player1Tichu": false,
         "player1GrandTichu": false,
         "player1Hand": deck.slice(0, 14),
@@ -85,8 +86,12 @@ export const handleTableUpdate = functions
       admin.firestore().collection("tables").doc(change.after.id).update({
         "gameUid": docRef.id,
       });
+      admin.firestore().collection("trades").doc(docRef.id).set({
+        "player1": null,
+        "player2": null,
+        "player3": null,
+        "player4": null,
+      });
       return;
     }
   });
-
-

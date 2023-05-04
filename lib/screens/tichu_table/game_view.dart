@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:tichu_flutter/models/tichu_card.dart';
 import 'package:tichu_flutter/models/tichu_game.dart';
 import 'package:tichu_flutter/widgets/my_hand.dart';
 import 'package:tichu_flutter/widgets/other_hand.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:tichu_flutter/widgets/trade_button.dart';
+import 'package:tichu_flutter/widgets/trading_fields.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/enums.dart';
 import '../../models/service_response.dart';
 import '../../models/tichu_table.dart';
 import '../../models/tichu_user.dart';
 import '../../widgets/player_banner.dart';
+import '../../utils/extensions.dart';
 
-class GameView extends StatelessWidget {
+class GameView extends HookWidget {
   const GameView({
     super.key,
     required this.table,
@@ -27,8 +33,9 @@ class GameView extends StatelessWidget {
   });
 
   final TichuTable table;
-  final TichuGame game;
   final TichuUser thisPlayer;
+  final TichuGame game;
+
   final PlayerNr thisPlayerNr;
   final Future<ServiceResponse<TichuUser?>> teamMateSRFuture;
   final PlayerNr teamMateNr;
@@ -39,35 +46,56 @@ class GameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late final List<String>? thisPlayerHand;
-    late final List<String>? teamMateHand;
-    late final List<String>? oppRightHand;
-    late final List<String>? oppLeftHand;
+    final thisPlayerHand =
+        useState<List<TichuCard>?>(thisPlayerNr == PlayerNr.one
+            ? game.player1Hand
+            : thisPlayerNr == PlayerNr.two
+                ? game.player2Hand
+                : thisPlayerNr == PlayerNr.three
+                    ? game.player3Hand
+                    : thisPlayerNr == PlayerNr.four
+                        ? game.player4Hand
+                        : null);
+
+    late final List<TichuCard>? teamMateHand;
+    late final List<TichuCard>? oppRightHand;
+    late final List<TichuCard>? oppLeftHand;
 
     if (thisPlayerNr == PlayerNr.one) {
-      thisPlayerHand = game.player1Hand;
       teamMateHand = game.player3Hand;
       oppRightHand = game.player2Hand;
       oppLeftHand = game.player4Hand;
     }
     if (thisPlayerNr == PlayerNr.two) {
-      thisPlayerHand = game.player2Hand;
       teamMateHand = game.player4Hand;
       oppRightHand = game.player3Hand;
       oppLeftHand = game.player1Hand;
     }
     if (thisPlayerNr == PlayerNr.three) {
-      thisPlayerHand = game.player3Hand;
       teamMateHand = game.player1Hand;
       oppRightHand = game.player4Hand;
       oppLeftHand = game.player2Hand;
     }
     if (thisPlayerNr == PlayerNr.four) {
-      thisPlayerHand = game.player4Hand;
       teamMateHand = game.player2Hand;
       oppRightHand = game.player1Hand;
       oppLeftHand = game.player3Hand;
     }
+
+    final selectedCards = useState(List<bool>.generate(
+      thisPlayerHand.value?.length ?? 0,
+      (idx) => false,
+    ));
+    thisPlayerHand.addListener(() {
+      selectedCards.value = List<bool>.generate(
+        thisPlayerHand.value?.length ?? 0,
+        (idx) => false,
+      );
+    });
+
+    final tradingCards =
+        useState(List<TichuCard?>.generate(3, (idx) => null, growable: false));
+
     return Stack(
       children: [
         PlayerBanner(
@@ -97,7 +125,12 @@ class GameView extends StatelessWidget {
           TablePos.OppLeft,
           table,
         ),
-        if (thisPlayerHand != null) MyHand(hand: thisPlayerHand),
+        if (thisPlayerHand != null)
+          MyHand(
+            hand: thisPlayerHand.value!,
+            selectedCards: selectedCards,
+            selectMaxOne: game.trading,
+          ),
         if (teamMateHand != null)
           OtherHand(
             hand: teamMateHand,
@@ -113,6 +146,15 @@ class GameView extends StatelessWidget {
             hand: oppLeftHand,
             tablePos: TablePos.OppLeft,
           ),
+        if (game.trading)
+          TradingFields(
+            tradingCards: tradingCards,
+            selectedCards: selectedCards,
+            thisPlayerHand: thisPlayerHand,
+          ),
+        if (game.trading)
+          TradeButton(
+              game: game, thisPlayerNr: thisPlayerNr, cards: tradingCards.value)
       ],
     );
   }

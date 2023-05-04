@@ -8,12 +8,16 @@ class MyPrimaryButton extends StatelessWidget {
     this.text,
     this.width,
     this.enabled = true,
+    this.enabledColor,
+    this.disabledColor,
   }) : super(key: key);
 
   final void Function() onPressed;
   final String? text;
   final double? width;
   final bool enabled;
+  final Color? enabledColor;
+  final Color? disabledColor;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,9 @@ class MyPrimaryButton extends StatelessWidget {
       focusElevation: 0,
       highlightElevation: 0,
       padding: const EdgeInsets.symmetric(vertical: 14),
-      color: enabled ? Colors.yellow : Colors.yellow[700],
+      color: enabled
+          ? enabledColor ?? Colors.yellow
+          : disabledColor ?? Colors.yellow[700],
       // shape: OutlineInputBorder(
       //   borderRadius: BorderRadius.circular(100),
       //   borderSide: BorderSide.none,

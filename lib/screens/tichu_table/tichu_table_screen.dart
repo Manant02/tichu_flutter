@@ -215,22 +215,6 @@ class TichuTableScreen extends ConsumerWidget {
                         .centered();
                   }
 
-                  final bool tableFull =
-                      tichuTable.player1Uid.isNotEmptyAndNotNull &&
-                          tichuTable.player2Uid.isNotEmptyAndNotNull &&
-                          tichuTable.player3Uid.isNotEmptyAndNotNull &&
-                          tichuTable.player4Uid.isNotEmptyAndNotNull;
-
-                  final bool thisPlayerReady = thisPlayerNr == PlayerNr.one
-                      ? tichuTable.player1Ready
-                      : thisPlayerNr == PlayerNr.two
-                          ? tichuTable.player2Ready
-                          : thisPlayerNr == PlayerNr.three
-                              ? tichuTable.player3Ready
-                              : thisPlayerNr == PlayerNr.four
-                                  ? tichuTable.player4Ready
-                                  : true;
-
                   AsyncValue<TichuGame>? tichuGameStream;
 
                   if (tichuTable.gameUid != null) {
@@ -280,8 +264,6 @@ class TichuTableScreen extends ConsumerWidget {
                           oppRightNr: oppRightNr,
                           oppLeftSRFuture: oppLeftSRFuture,
                           oppLeftNr: oppLeftNr,
-                          tableFull: tableFull,
-                          thisPlayerReady: thisPlayerReady,
                         ).expand(),
                       if (tichuGameStream != null)
                         tichuGameStream.when(

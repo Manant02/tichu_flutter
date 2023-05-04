@@ -74,13 +74,13 @@ class PlayerBanner extends StatelessWidget {
 
     return Align(
       alignment: tablePos == TablePos.thisPlayer
-          ? const Alignment(0, 0.6)
+          ? const Alignment(0, 0.55)
           : tablePos == TablePos.teamMate
-              ? const Alignment(0, -0.9)
+              ? const Alignment(0, -1)
               : tablePos == TablePos.OppRight
-                  ? const Alignment(0.9, -0.5)
+                  ? const Alignment(0.9, -0.6)
                   : tablePos == TablePos.OppLeft
-                      ? const Alignment(-0.9, -0.5)
+                      ? const Alignment(-0.9, -0.6)
                       : const Alignment(0, 0),
       child: InkWell(
         onTap: () {

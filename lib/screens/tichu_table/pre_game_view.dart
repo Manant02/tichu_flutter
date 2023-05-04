@@ -24,12 +24,11 @@ class PreGameView extends StatelessWidget {
     required this.oppRightNr,
     required this.oppLeftSRFuture,
     required this.oppLeftNr,
-    required this.tableFull,
-    required this.thisPlayerReady,
   });
 
   final TichuTable table;
   final TichuUser thisPlayer;
+
   final PlayerNr thisPlayerNr;
   final Future<ServiceResponse<TichuUser?>> teamMateSRFuture;
   final PlayerNr teamMateNr;
@@ -38,11 +37,23 @@ class PreGameView extends StatelessWidget {
   final Future<ServiceResponse<TichuUser?>> oppLeftSRFuture;
   final PlayerNr oppLeftNr;
 
-  final bool tableFull;
-  final bool thisPlayerReady;
-
   @override
   Widget build(BuildContext context) {
+    final bool tableFull = table.player1Uid.isNotEmptyAndNotNull &&
+        table.player2Uid.isNotEmptyAndNotNull &&
+        table.player3Uid.isNotEmptyAndNotNull &&
+        table.player4Uid.isNotEmptyAndNotNull;
+
+    final bool thisPlayerReady = thisPlayerNr == PlayerNr.one
+        ? table.player1Ready
+        : thisPlayerNr == PlayerNr.two
+            ? table.player2Ready
+            : thisPlayerNr == PlayerNr.three
+                ? table.player3Ready
+                : thisPlayerNr == PlayerNr.four
+                    ? table.player4Ready
+                    : true;
+
     return Stack(
       children: [
         PlayerBanner(

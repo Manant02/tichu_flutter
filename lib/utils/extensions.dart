@@ -7,3 +7,13 @@ extension ScreenSizeExtensions on num {
           MediaQuery.of(context).padding.top) *
       this;
 }
+
+extension ListExtensions on List {
+  List boolFilter(List<bool> filter) =>
+      where((element) => filter[indexOf(element)]).toList();
+}
+
+extension NListExtnsions on List? {
+  bool get isEmptyOrNull => this?.isEmpty ?? true;
+  bool get isNotEmptyOrNotNull => this?.isNotEmpty ?? false;
+}

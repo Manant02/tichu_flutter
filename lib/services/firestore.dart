@@ -4,6 +4,8 @@ import 'package:tichu_flutter/models/service_response.dart';
 import 'package:tichu_flutter/models/tichu_user.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../models/tichu_card.dart';
+import '../models/tichu_game.dart';
 import '../models/tichu_table.dart';
 
 class Firestore {
@@ -200,6 +202,23 @@ class Firestore {
     try {
       await _firestore.collection('tables').doc(table.uid).update({
         '${playerNr.str}Ready': false,
+      });
+      errString = null;
+    } catch (e) {
+      errString = 'Firestore.setPlayerReady:${e.toString()}';
+    }
+    return ServiceResponse(errString, null);
+  }
+
+  Future<ServiceResponse<void>> makeTrade(
+    TichuGame game,
+    PlayerNr playerNr,
+    List<TichuCard> cards,
+  ) async {
+    String? errString = 'Firestore.setPlayerReady:error';
+    try {
+      await _firestore.collection('trades').doc(game.uid).update({
+        playerNr.str: cards.map((card) => card.str).toList(),
       });
       errString = null;
     } catch (e) {
