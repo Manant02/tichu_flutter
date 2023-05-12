@@ -95,3 +95,62 @@ export const handleTableUpdate = functions
       return;
     }
   });
+
+export const handleTradeUpdate = functions
+  .region("europe-west6")
+  .firestore.document("trades/{gameUid}")
+  .onUpdate(async (change, context) => {
+    const trade = change.after.data();
+    const gameUid = change.after.id;
+
+    // If all trades are set, execute trades and start game
+    if (trade.player1 != null &&
+      trade.player2 != null &&
+      trade.player3 != null &&
+      trade.player4 != null
+    ) {
+      const gameDocRef = admin.firestore().collection("games").doc(gameUid);
+      gameDocRef.update({
+        "player1Hand": admin.firestore.FieldValue.arrayRemove(
+          ...trade.player1,
+        ),
+        "player2Hand": admin.firestore.FieldValue.arrayRemove(
+          ...trade.player2,
+        ),
+        "player3Hand": admin.firestore.FieldValue.arrayRemove(
+          ...trade.player3,
+        ),
+        "player4Hand": admin.firestore.FieldValue.arrayRemove(
+          ...trade.player4,
+        ),
+      });
+      gameDocRef.update({
+        "player1Hand": admin.firestore.FieldValue.arrayUnion(
+          ...[trade.player4[2], trade.player2[0], trade.player3[1]],
+        ),
+        "player2Hand": admin.firestore.FieldValue.arrayUnion(
+          ...[trade.player1[2], trade.player4[1], trade.player3[0]],
+        ),
+        "player3Hand": admin.firestore.FieldValue.arrayUnion(
+          ...[trade.player1[1], trade.player2[2], trade.player4[0]],
+        ),
+        "player4Hand": admin.firestore.FieldValue.arrayUnion(
+          ...[trade.player1[0], trade.player2[1], trade.player3[2]],
+        ),
+        "trading": false,
+      });
+      admin.firestore().collection("trades").doc(gameUid).delete();
+      const game = (await gameDocRef.get()).data();
+      if (game != undefined) {
+        if (game.player1Hand.includes("sM")) {
+          gameDocRef.update({"turn": "player1"});
+        } else if (game.player2Hand.includes("sM")) {
+          gameDocRef.update({"turn": "player2"});
+        } else if (game.player3Hand.includes("sM")) {
+          gameDocRef.update({"turn": "player3"});
+        } else if (game.player4Hand.includes("sM")) {
+          gameDocRef.update({"turn": "player4"});
+        }
+      }
+    }
+  });

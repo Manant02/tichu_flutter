@@ -29,6 +29,7 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
+        // TODO: swap loading overlay and safearea
         child: LoadingOverlay(
           isLoading: ref.watch(loginLoadingProvider),
           child: ConstrainedBox(

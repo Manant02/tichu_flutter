@@ -1,0 +1,49 @@
+Date : 2023-05-04 15:34:07
+Directory : /home/manman/Github/tichu_flutter
+Total : 15 files,  374 codes, 10 comments, 25 blanks, all 409 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| Dart       |         14 |        377 |          0 |         27 |        404 |
+| TypeScript |          1 |         -3 |         10 |         -2 |          5 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                              | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                 |         15 |        374 |         10 |         25 |        409 |
+| functions                                                                         |          1 |         -3 |         10 |         -2 |          5 |
+| functions/src                                                                     |          1 |         -3 |         10 |         -2 |          5 |
+| lib                                                                               |         14 |        377 |          0 |         27 |        404 |
+| lib/models                                                                        |          3 |        174 |          0 |          3 |        177 |
+| lib/screens                                                                       |          3 |         30 |          0 |          5 |         35 |
+| lib/screens/tichu_table                                                           |          3 |         30 |          0 |          5 |         35 |
+| lib/services                                                                      |          1 |         18 |          0 |          1 |         19 |
+| lib/utils                                                                         |          1 |          8 |          0 |          2 |         10 |
+| lib/widgets                                                                       |          6 |        147 |          0 |         16 |        163 |
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                          | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /home/manman/Github/tichu_flutter/functions/src/index.ts                          | TypeScript |         -3 |         10 |         -2 |          5 |
+| /home/manman/Github/tichu_flutter/lib/models/enums.dart                           | Dart       |          9 |          0 |          1 |         10 |
+| /home/manman/Github/tichu_flutter/lib/models/tichu_card.dart                      | Dart       |        150 |          0 |          2 |        152 |
+| /home/manman/Github/tichu_flutter/lib/models/tichu_game.dart                      | Dart       |         15 |          0 |          0 |         15 |
+| /home/manman/Github/tichu_flutter/lib/screens/tichu_table/game_view.dart          | Dart       |         37 |          0 |          5 |         42 |
+| /home/manman/Github/tichu_flutter/lib/screens/tichu_table/pre_game_view.dart      | Dart       |          9 |          0 |          2 |         11 |
+| /home/manman/Github/tichu_flutter/lib/screens/tichu_table/tichu_table_screen.dart | Dart       |        -16 |          0 |         -2 |        -18 |
+| /home/manman/Github/tichu_flutter/lib/services/firestore.dart                     | Dart       |         18 |          0 |          1 |         19 |
+| /home/manman/Github/tichu_flutter/lib/utils/extensions.dart                       | Dart       |          8 |          0 |          2 |         10 |
+| /home/manman/Github/tichu_flutter/lib/widgets/my_hand.dart                        | Dart       |         24 |          0 |          0 |         24 |
+| /home/manman/Github/tichu_flutter/lib/widgets/my_primary_button.dart              | Dart       |          6 |          0 |          0 |          6 |
+| /home/manman/Github/tichu_flutter/lib/widgets/other_hand.dart                     | Dart       |          1 |          0 |          0 |          1 |
+| /home/manman/Github/tichu_flutter/lib/widgets/tichu_card_widget.dart              | Dart       |          3 |          0 |          0 |          3 |
+| /home/manman/Github/tichu_flutter/lib/widgets/trade_button.dart                   | Dart       |         43 |          0 |          5 |         48 |
+| /home/manman/Github/tichu_flutter/lib/widgets/trading_fields.dart                 | Dart       |         70 |          0 |         11 |         81 |
+| Total                                                                             |            |        374 |         10 |         25 |        409 |
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

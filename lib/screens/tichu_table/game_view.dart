@@ -8,6 +8,7 @@ import 'package:tichu_flutter/widgets/other_hand.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tichu_flutter/widgets/trade_button.dart';
 import 'package:tichu_flutter/widgets/trading_fields.dart';
+import 'package:tichu_flutter/widgets/waiting_for_everyone_to_trade.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/enums.dart';
@@ -95,6 +96,7 @@ class GameView extends HookWidget {
 
     final tradingCards =
         useState(List<TichuCard?>.generate(3, (idx) => null, growable: false));
+    final thisPlayerHasTraded = useState(false);
 
     return Stack(
       children: [
@@ -146,15 +148,21 @@ class GameView extends HookWidget {
             hand: oppLeftHand,
             tablePos: TablePos.OppLeft,
           ),
-        if (game.trading)
+        if (game.trading && !thisPlayerHasTraded.value)
           TradingFields(
             tradingCards: tradingCards,
             selectedCards: selectedCards,
             thisPlayerHand: thisPlayerHand,
           ),
-        if (game.trading)
+        if (game.trading && !thisPlayerHasTraded.value)
           TradeButton(
-              game: game, thisPlayerNr: thisPlayerNr, cards: tradingCards.value)
+            game: game,
+            thisPlayerNr: thisPlayerNr,
+            cards: tradingCards.value,
+            thisPlayerHasTraded: thisPlayerHasTraded,
+          ),
+        if (game.trading && thisPlayerHasTraded.value)
+          const WaitingForEveryoneToTrade(),
       ],
     );
   }

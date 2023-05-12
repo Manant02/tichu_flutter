@@ -15,11 +15,13 @@ class TradeButton extends StatelessWidget {
     required this.game,
     required this.thisPlayerNr,
     required this.cards,
+    required this.thisPlayerHasTraded,
   });
 
   final TichuGame game;
   final PlayerNr thisPlayerNr;
   final List<TichuCard?> cards;
+  final ValueNotifier<bool> thisPlayerHasTraded;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,9 @@ class TradeButton extends StatelessWidget {
               title: 'An error occurred',
               contentText: sr.err.toString(),
             );
+            return;
           }
+          thisPlayerHasTraded.value = true;
         },
       ),
     );
