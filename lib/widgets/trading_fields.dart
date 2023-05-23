@@ -11,12 +11,12 @@ class TradingFields extends StatelessWidget {
     super.key,
     required this.tradingCards,
     required this.selectedCards,
-    required this.thisPlayerHand,
+    required this.thisPlayerHandFiltered,
   });
 
   final ValueNotifier<List<TichuCard?>> tradingCards;
   final ValueNotifier<List<bool>> selectedCards;
-  final ValueNotifier<List<TichuCard>?> thisPlayerHand;
+  final List<TichuCard>? thisPlayerHandFiltered;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class TradingFields extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 if (!selectedCards.value.contains(true) ||
-                    thisPlayerHand.value.isEmptyOrNull) return;
+                    thisPlayerHandFiltered.isEmptyOrNull) return;
 
                 placeSelectedCards(0);
               },
@@ -42,7 +42,7 @@ class TradingFields extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 if (!selectedCards.value.contains(true) ||
-                    thisPlayerHand.value.isEmptyOrNull) return;
+                    thisPlayerHandFiltered.isEmptyOrNull) return;
 
                 placeSelectedCards(1);
               },
@@ -51,7 +51,7 @@ class TradingFields extends StatelessWidget {
             GestureDetector(
                 onTap: () {
                   if (!selectedCards.value.contains(true) ||
-                      thisPlayerHand.value.isEmptyOrNull) return;
+                      thisPlayerHandFiltered.isEmptyOrNull) return;
 
                   placeSelectedCards(2);
                 },
@@ -64,17 +64,10 @@ class TradingFields extends StatelessWidget {
 
   void placeSelectedCards(int tradeSpotIdx) {
     final updatedTradingCards = [...tradingCards.value];
-    final returnedCard = updatedTradingCards[tradeSpotIdx];
     updatedTradingCards[tradeSpotIdx] =
-        thisPlayerHand.value!.boolFilter(selectedCards.value)[0];
+        thisPlayerHandFiltered!.boolFilter(selectedCards.value)[0];
 
-    final updatedThisPlayerHand = [...thisPlayerHand.value!];
-    updatedThisPlayerHand.removeAt(selectedCards.value.indexOf(true));
-    if (returnedCard != null) {
-      updatedThisPlayerHand.add(returnedCard);
-    }
-
+    selectedCards.value = []; // to remove all selections
     tradingCards.value = updatedTradingCards;
-    thisPlayerHand.value = updatedThisPlayerHand;
   }
 }

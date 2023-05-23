@@ -14,13 +14,13 @@ class TradeButton extends StatelessWidget {
     super.key,
     required this.game,
     required this.thisPlayerNr,
-    required this.cards,
+    required this.tradingCards,
     required this.thisPlayerHasTraded,
   });
 
   final TichuGame game;
   final PlayerNr thisPlayerNr;
-  final List<TichuCard?> cards;
+  final ValueNotifier<List<TichuCard?>> tradingCards;
   final ValueNotifier<bool> thisPlayerHasTraded;
 
   @override
@@ -29,13 +29,13 @@ class TradeButton extends StatelessWidget {
     return Align(
       alignment: const Alignment(0, 0.32),
       child: MyPrimaryButton(
-        enabled: !cards.contains(null),
+        enabled: !tradingCards.value.contains(null),
         enabledColor: Colors.blue,
         disabledColor: Colors.blue[700],
         text: 'Trade',
         onPressed: () async {
-          final sr = await firestore.makeTrade(
-              game, thisPlayerNr, <TichuCard>[...cards.whereType<TichuCard>()]);
+          final sr = await firestore.makeTrade(game, thisPlayerNr,
+              <TichuCard>[...tradingCards.value.whereType<TichuCard>()]);
           if (sr.err != null) {
             showPlatformAlertDialog(
               title: 'An error occurred',
@@ -43,6 +43,7 @@ class TradeButton extends StatelessWidget {
             );
             return;
           }
+          tradingCards.value = [null, null, null];
           thisPlayerHasTraded.value = true;
         },
       ),

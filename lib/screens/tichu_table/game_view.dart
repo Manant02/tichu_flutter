@@ -47,16 +47,15 @@ class GameView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final thisPlayerHand =
-        useState<List<TichuCard>?>(thisPlayerNr == PlayerNr.one
-            ? game.player1Hand
-            : thisPlayerNr == PlayerNr.two
-                ? game.player2Hand
-                : thisPlayerNr == PlayerNr.three
-                    ? game.player3Hand
-                    : thisPlayerNr == PlayerNr.four
-                        ? game.player4Hand
-                        : null);
+    final thisPlayerHand = thisPlayerNr == PlayerNr.one
+        ? game.player1Hand
+        : thisPlayerNr == PlayerNr.two
+            ? game.player2Hand
+            : thisPlayerNr == PlayerNr.three
+                ? game.player3Hand
+                : thisPlayerNr == PlayerNr.four
+                    ? game.player4Hand
+                    : null;
 
     late final List<TichuCard>? teamMateHand;
     late final List<TichuCard>? oppRightHand;
@@ -83,20 +82,25 @@ class GameView extends HookWidget {
       oppLeftHand = game.player3Hand;
     }
 
+    final tradingCards =
+        useState(List<TichuCard?>.generate(3, (idx) => null, growable: true));
+    final thisPlayerHasTraded = useState(false);
+
+    final thisPlayerHandFiltered = thisPlayerHand?.toList();
+    thisPlayerHandFiltered
+        ?.removeWhere((element) => tradingCards.value.contains(element));
+
     final selectedCards = useState(List<bool>.generate(
-      thisPlayerHand.value?.length ?? 0,
+      thisPlayerHand?.length ?? 0,
       (idx) => false,
     ));
-    thisPlayerHand.addListener(() {
+
+    if (thisPlayerHandFiltered?.length != selectedCards.value.length) {
       selectedCards.value = List<bool>.generate(
-        thisPlayerHand.value?.length ?? 0,
+        thisPlayerHandFiltered?.length ?? 0,
         (idx) => false,
       );
-    });
-
-    final tradingCards =
-        useState(List<TichuCard?>.generate(3, (idx) => null, growable: false));
-    final thisPlayerHasTraded = useState(false);
+    }
 
     return Stack(
       children: [
@@ -105,7 +109,9 @@ class GameView extends HookWidget {
           tichuUser: thisPlayer,
           playerNr: thisPlayerNr,
           tablePos: TablePos.thisPlayer,
-          state: BannerState.neutral,
+          state: game.turn == thisPlayerNr
+              ? BannerState.turn
+              : BannerState.neutral,
           tichu: false,
           grandTichu: false,
         ),
@@ -114,22 +120,25 @@ class GameView extends HookWidget {
           teamMateNr,
           TablePos.teamMate,
           table,
+          game.turn,
         ),
         buildPlayerBannerFromSRFuture(
           oppRightSRFuture,
           oppRightNr,
           TablePos.OppRight,
           table,
+          game.turn,
         ),
         buildPlayerBannerFromSRFuture(
           oppLeftSRFuture,
           oppLeftNr,
           TablePos.OppLeft,
           table,
+          game.turn,
         ),
-        if (thisPlayerHand != null)
+        if (thisPlayerHand != null && thisPlayerHandFiltered != null)
           MyHand(
-            hand: thisPlayerHand.value!,
+            hand: thisPlayerHandFiltered,
             selectedCards: selectedCards,
             selectMaxOne: game.trading,
           ),
@@ -152,17 +161,22 @@ class GameView extends HookWidget {
           TradingFields(
             tradingCards: tradingCards,
             selectedCards: selectedCards,
-            thisPlayerHand: thisPlayerHand,
+            thisPlayerHandFiltered: thisPlayerHandFiltered,
           ),
         if (game.trading && !thisPlayerHasTraded.value)
           TradeButton(
             game: game,
             thisPlayerNr: thisPlayerNr,
-            cards: tradingCards.value,
+            tradingCards: tradingCards,
             thisPlayerHasTraded: thisPlayerHasTraded,
           ),
         if (game.trading && thisPlayerHasTraded.value)
           const WaitingForEveryoneToTrade(),
+        // Align(
+        //   alignment: Alignment(0.5, 0.5),
+        //   child: Text(
+        //       'selectedCards.length: ${selectedCards.value.length}\nthisPlayerHand.length: ${thisPlayerHand?.length}\nthisPlayerHandFiltered.length: ${thisPlayerHandFiltered?.length}'),
+        // ),
       ],
     );
   }

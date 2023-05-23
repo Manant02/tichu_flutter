@@ -14,6 +14,7 @@ FutureBuilder<ServiceResponse<TichuUser?>> buildPlayerBannerFromSRFuture(
   PlayerNr playerNr,
   TablePos bannerPos,
   TichuTable table,
+  PlayerNr? turn,
 ) {
   return FutureBuilder(
     future: playerSRFuture,
@@ -29,7 +30,11 @@ FutureBuilder<ServiceResponse<TichuUser?>> buildPlayerBannerFromSRFuture(
             playerNr: playerNr,
             tablePos: bannerPos,
             table: table,
-            state: res.ret == null ? BannerState.empty : BannerState.neutral,
+            state: res.ret == null
+                ? BannerState.empty
+                : turn == playerNr
+                    ? BannerState.turn
+                    : BannerState.neutral,
             tichu: false,
             grandTichu: false,
           );

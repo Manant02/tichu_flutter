@@ -70,18 +70,21 @@ class PreGameView extends StatelessWidget {
           teamMateNr,
           TablePos.teamMate,
           table,
+          null,
         ),
         buildPlayerBannerFromSRFuture(
           oppRightSRFuture,
           oppRightNr,
           TablePos.OppRight,
           table,
+          null,
         ),
         buildPlayerBannerFromSRFuture(
           oppLeftSRFuture,
           oppLeftNr,
           TablePos.OppLeft,
           table,
+          null,
         ),
         if (!tableFull) const WaitingForPlayers(),
         if (tableFull && !thisPlayerReady)

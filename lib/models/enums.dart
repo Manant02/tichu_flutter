@@ -45,6 +45,9 @@ enum BannerState {
 enum Suit { red, green, blue, black, special }
 
 enum Rank {
+  dog,
+  phoenix,
+  mahjong,
   two,
   three,
   four,
@@ -58,10 +61,7 @@ enum Rank {
   queen,
   king,
   ace,
-  mahjong,
   dragon,
-  phoenix,
-  dog,
 }
 
 // enum Card {
@@ -122,3 +122,15 @@ enum Rank {
 //   black_king,
 //   black_ace,
 // }
+
+enum Combo {
+  single,
+  pair,
+  adjacentPair,
+  trio,
+  fullhouse,
+  street,
+  bomb,
+  streetBomb,
+  special,
+}

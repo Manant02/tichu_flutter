@@ -25,6 +25,21 @@ export const handleTableUpdate = functions
   .onUpdate(async (change, context) => {
     const table = change.after.data();
 
+    // If table is not full, unready everyone and remove gameUid
+    if (table.player1Uid == null ||
+      table.player2Uid == null ||
+      table.player3Uid == null ||
+      table.player4Uid == null) {
+      admin.firestore().collection("tables").doc(change.after.id).update({
+        "gameUid": null,
+        "player1Ready": false,
+        "player2Ready": false,
+        "player3Ready": false,
+        "player4Ready": false,
+      });
+      return;
+    }
+
     // If all players ready, start new game
     if (table.gameUid == null &&
       table.player1Ready &&
@@ -110,20 +125,20 @@ export const handleTradeUpdate = functions
       trade.player4 != null
     ) {
       const gameDocRef = admin.firestore().collection("games").doc(gameUid);
-      gameDocRef.update({
-        "player1Hand": admin.firestore.FieldValue.arrayRemove(
-          ...trade.player1,
-        ),
-        "player2Hand": admin.firestore.FieldValue.arrayRemove(
-          ...trade.player2,
-        ),
-        "player3Hand": admin.firestore.FieldValue.arrayRemove(
-          ...trade.player3,
-        ),
-        "player4Hand": admin.firestore.FieldValue.arrayRemove(
-          ...trade.player4,
-        ),
-      });
+      // gameDocRef.update({
+      //   "player1Hand": admin.firestore.FieldValue.arrayRemove(
+      //     ...trade.player1,
+      //   ),
+      //   "player2Hand": admin.firestore.FieldValue.arrayRemove(
+      //     ...trade.player2,
+      //   ),
+      //   "player3Hand": admin.firestore.FieldValue.arrayRemove(
+      //     ...trade.player3,
+      //   ),
+      //   "player4Hand": admin.firestore.FieldValue.arrayRemove(
+      //     ...trade.player4,
+      //   ),
+      // });
       gameDocRef.update({
         "player1Hand": admin.firestore.FieldValue.arrayUnion(
           ...[trade.player4[2], trade.player2[0], trade.player3[1]],

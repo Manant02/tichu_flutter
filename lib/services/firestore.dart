@@ -220,6 +220,10 @@ class Firestore {
       await _firestore.collection('trades').doc(game.uid).update({
         playerNr.str: cards.map((card) => card.str).toList(),
       });
+      await _firestore.collection('games').doc(game.uid).update({
+        '${playerNr.str}Hand':
+            FieldValue.arrayRemove(cards.map((e) => e.str).toList()),
+      });
       errString = null;
     } catch (e) {
       errString = 'Firestore.setPlayerReady:${e.toString()}';
